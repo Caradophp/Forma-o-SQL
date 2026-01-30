@@ -1,0 +1,86 @@
+erDiagram
+    CLIENTE ||--o{ VEICULO : "possui"
+    CLIENTE ||--o{ ORDEM_SERVICO : "solicita"
+    
+    VEICULO ||--o{ ORDEM_SERVICO : "recebe"
+    
+    MECANICO ||--o{ ORDEM_SERVICO : "responsavel_por"
+    
+    ORDEM_SERVICO ||--|{ ITEM_SERVICO : "contem"
+    ORDEM_SERVICO ||--o{ ITEM_PECA : "utiliza"
+    
+    SERVICO ||--o{ ITEM_SERVICO : "definido_em"
+    PECA ||--o{ ITEM_PECA : "fornecida_em"
+
+    CLIENTE {
+        int id PK
+        string nome
+        string cpf_cnpj UK
+        string telefone
+        string email
+        string endereco
+    }
+
+    VEICULO {
+        int id PK
+        int cliente_id FK
+        string placa UK
+        string marca
+        string modelo
+        int ano
+        string cor
+        string chassi
+    }
+
+    MECANICO {
+        int id PK
+        string nome
+        string especialidade
+        string cpf UK
+        decimal comissao_percentual
+    }
+
+    SERVICO {
+        int id PK
+        string descricao
+        decimal preco_base
+        int tempo_estimado_minutos
+    }
+
+    PECA {
+        int id PK
+        string nome
+        string codigo_fabricante UK
+        decimal preco_venda
+        int estoque_atual
+    }
+
+    ORDEM_SERVICO {
+        int id PK
+        int cliente_id FK
+        int veiculo_id FK
+        int mecanico_id FK
+        datetime data_abertura
+        datetime data_conclusao
+        decimal valor_total
+        string status
+        string observacoes
+    }
+
+    ITEM_SERVICO {
+        int id PK
+        int os_id FK
+        int servico_id FK
+        int quantidade
+        decimal valor_unitario
+        decimal subtotal
+    }
+
+    ITEM_PECA {
+        int id PK
+        int os_id FK
+        int peca_id FK
+        int quantidade
+        decimal valor_unitario
+        decimal subtotal
+    }
