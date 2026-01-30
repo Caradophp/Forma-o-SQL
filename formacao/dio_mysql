@@ -1,0 +1,40 @@
+#Configura autocommit para falso
+set @@autocommit = 0;
+
+#Inicia transação
+START TRANSACTION;
+
+INSERT INTO producer (name) VALUES ('Studio Ghibli');
+INSERT INTO producer (name) VALUES ('MAPPA');
+
+COMMIT;
+
+SELECT * FROM producer;
+
+# Procedure 
+DELIMITER $$
+
+CREATE PROCEDURE insert_producer (
+    IN p_name VARCHAR(100)
+)
+BEGIN
+    START TRANSACTION;
+
+    INSERT INTO producer (name) VALUES (p_name);
+
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+CALL insert_producer('Ufotable');
+
+
+# Comandos para realizar BKP e recovery
+/*
+ * Realiza o BKP: mysql -u root -p anime_store < anime_store_backup.sql
+ * Realiza o recovery: mysql -u root -p anime_store < anime_store_backup.sql
+ * 
+ */
+
+
