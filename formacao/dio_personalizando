@@ -1,0 +1,98 @@
+#Insert
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_create_producer (
+    IN p_name VARCHAR(100)
+)
+BEGIN
+    START TRANSACTION;
+
+    INSERT INTO producer (name)
+    VALUES (p_name);
+
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+CALL sp_create_producer('Kyoto Animation');
+
+
+# Listar Todos
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_read_producers ()
+BEGIN
+    SELECT * FROM producer;
+END$$
+
+DELIMITER ;
+
+CALL sp_read_producers();
+
+# Buscar por ID
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_read_producer_by_id (
+    IN p_id INT
+)
+BEGIN
+    SELECT * 
+    FROM producer
+    WHERE id = p_id;
+END$$
+
+DELIMITER ;
+
+CALL sp_read_producer_by_id(1);
+
+# Update
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_update_producer (
+    IN p_id INT,
+    IN p_name VARCHAR(100)
+)
+BEGIN
+    START TRANSACTION;
+
+    UPDATE producer
+    SET name = p_name
+    WHERE id = p_id;
+
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+CALL sp_update_producer(1, 'Madhouse');
+
+
+# Delete
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_delete_producer_safe (
+    IN p_id INT
+)
+BEGIN
+    START TRANSACTION;
+
+    IF EXISTS (SELECT 1 FROM producer WHERE id = p_id) THEN
+        DELETE FROM producer WHERE id = p_id;
+        COMMIT;
+    ELSE
+        ROLLBACK;
+    END IF;
+END$$
+
+DELIMITER ;
+
+CALL sp_delete_producer_safe(1);
+
+#Criação de index para melhorar busca pro producer
+CREATE INDEX idx_producer_name ON producer (name);
