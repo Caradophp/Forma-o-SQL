@@ -1,0 +1,15 @@
+#Cria usuário e define pemissões
+create user 'geral@localhost' identified by '123Mudar' ;
+grant all privileges on producer.* to 'geral@localhost';
+grant all privileges on anime.* to 'geral@localhost';
+
+#Cria view para facilitar consulta
+create view anime_producer 
+as
+	select 
+		a.name as Nome,
+		a.episodes as "Episódios",
+		p.name as "Produtora"
+	from anime a 
+	inner JOIN 
+		producer p on a.producer_id = p.id;
